@@ -15,5 +15,8 @@ fn main() {
         } => {
             cli::benchmark::handle_cli(duration, algorithm, output_path);
         }
+        Commands::Test { number, algorithm } => {
+            cli::test::handle_cli(*number, algorithm);
+        }
     }
 }

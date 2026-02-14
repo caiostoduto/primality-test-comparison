@@ -27,6 +27,14 @@ pub enum Commands {
         #[arg(short, long, value_name = "FOLDER", default_value = "./out")]
         output_path: PathBuf,
     },
+    Test {
+        /// Number to test for primality
+        number: u64,
+
+        /// Algorithm to use for testing (e.g., trial-division, miller-rabin, etc.)
+        #[arg(value_enum)]
+        algorithm: Option<Algorithm>,
+    },
 }
 
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum)]
