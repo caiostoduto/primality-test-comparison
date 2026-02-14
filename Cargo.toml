@@ -8,3 +8,5 @@ humantime = "2.3"
 parquet = "57.3.0"
 arrow = "57.3.0"
 clap = { version = "4.5.58", features = ["derive"] }
+strum_macros = "0.27.2"
+strum = "0.27.2"

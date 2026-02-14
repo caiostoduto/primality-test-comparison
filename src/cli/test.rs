@@ -1,3 +1,5 @@
+use strum::IntoEnumIterator;
+
 use crate::cli::parsing::Algorithm;
 
 pub fn handle_cli(number: u64, algorithm: &Option<Algorithm>) {
@@ -5,8 +7,8 @@ pub fn handle_cli(number: u64, algorithm: &Option<Algorithm>) {
     if algorithm.is_none() {
         println!("❗️ No algorithm specified. Running all algorithms.");
 
-        for alg in &[Algorithm::TrialDivision] {
-            run_test(number, *alg);
+        for alg in Algorithm::iter() {
+            run_test(number, alg);
         }
     } else {
         run_test(number, (*algorithm).unwrap());
