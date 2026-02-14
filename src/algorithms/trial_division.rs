@@ -3,8 +3,8 @@ pub fn is_prime(n: u64) -> bool {
         return false;
     }
 
-    if n == 2 {
-        return true;
+    if n % 2 == 0 {
+        return n == 2;
     }
 
     let mut i: u64 = 3;
