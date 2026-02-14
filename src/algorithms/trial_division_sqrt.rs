@@ -9,7 +9,7 @@ pub fn is_prime(n: u64) -> bool {
 
     let mut i: u64 = 3;
 
-    while i * i <= n {
+    while i <= ((n as f64).sqrt() as u64) {
         if n % i == 0 {
             return false;
         }

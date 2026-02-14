@@ -14,7 +14,7 @@ struct PrimeResultLocal {
 
 struct PrimeResultFinal {
     number: u64,
-    timestamp: std::time::SystemTime,
+    elapsed: u64, // Elapsed time in microseconds since benchmark start
     thread_id: usize,
 }
 
@@ -75,7 +75,7 @@ fn run_benchmark(duration_str: &str, algorithm: Algorithm, output_path: &PathBuf
 
     // Order primes by timestamp
     let mut primes = primes_vector.lock().unwrap();
-    primes.sort_by_key(|p| p.timestamp);
+    primes.sort_by_key(|p| p.elapsed);
 
     // Create output directory if it doesn't exist
     let _ = fs::create_dir(output_path);
@@ -105,23 +105,19 @@ fn write_to_parquet(
 
     // Define schema
     let schema = Arc::new(Schema::new(vec![
-        Field::new("timestamp", DataType::UInt64, false),
+        Field::new("elapsed", DataType::UInt64, false),
         Field::new("thread", DataType::UInt64, false),
         Field::new("number", DataType::UInt64, false),
     ]));
 
     // Create arrays for each column
-    let mut timestamp_builder = UInt64Builder::new();
+    let mut elapsed_builder = UInt64Builder::new();
     let mut thread_builder = UInt64Builder::new();
     let mut number_builder = UInt64Builder::new();
 
     for prime in primes {
-        let ts = prime
-            .timestamp
-            .duration_since(std::time::UNIX_EPOCH)
-            .unwrap()
-            .as_millis() as u64;
-        timestamp_builder.append_value(ts);
+        let ts = prime.elapsed as u64;
+        elapsed_builder.append_value(ts);
         thread_builder.append_value(prime.thread_id as u64);
         number_builder.append_value(prime.number);
     }
@@ -130,7 +126,7 @@ fn write_to_parquet(
     let batch = RecordBatch::try_new(
         schema.clone(),
         vec![
-            Arc::new(timestamp_builder.finish()) as ArrayRef,
+            Arc::new(elapsed_builder.finish()) as ArrayRef,
             Arc::new(thread_builder.finish()) as ArrayRef,
             Arc::new(number_builder.finish()) as ArrayRef,
         ],
@@ -159,6 +155,9 @@ fn is_prime_in_parallel(
     // Thread handles
     let mut handles: Vec<thread::JoinHandle<()>> = Vec::new();
 
+    // Start time for calculating elapsed time for each prime found
+    let start_time = std::time::SystemTime::now();
+
     // Spawn threads
     for i in 0..parallelism_count {
         // Clone shared state for each thread
@@ -181,7 +180,8 @@ fn is_prime_in_parallel(
                         for p in local_primes.drain(..) {
                             shared_primes.push(PrimeResultFinal {
                                 number: p.number,
-                                timestamp: p.timestamp,
+                                elapsed: p.timestamp.duration_since(start_time).unwrap().as_micros()
+                                    as u64,
                                 thread_id: i,
                             });
                         }
@@ -208,7 +208,8 @@ fn is_prime_in_parallel(
                     for p in local_primes.drain(..) {
                         shared_primes.push(PrimeResultFinal {
                             number: p.number,
-                            timestamp: p.timestamp,
+                            elapsed: p.timestamp.duration_since(start_time).unwrap().as_micros()
+                                as u64,
                             thread_id: i,
                         });
                     }

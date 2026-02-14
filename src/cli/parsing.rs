@@ -40,18 +40,21 @@ pub enum Commands {
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum)]
 pub enum Algorithm {
     TrialDivision,
+    TrialDivisionSqrt,
 }
 
 impl Algorithm {
     pub fn as_str(&self) -> &'static str {
         match self {
             Algorithm::TrialDivision => "trial-division",
+            Algorithm::TrialDivisionSqrt => "trial-division-sqrt",
         }
     }
 
     pub fn as_algorithm_fn(&self) -> fn(u64) -> bool {
         match self {
             Algorithm::TrialDivision => trial_division::is_prime,
+            Algorithm::TrialDivisionSqrt => trial_division_sqrt::is_prime,
         }
     }
 }
