@@ -1,8 +1,19 @@
 mod algorithms;
+mod cli;
 
-use algorithms::*;
+use clap::Parser;
+use cli::parsing::*;
 
 fn main() {
-    println!("Hello, world!");
-    println!("Is 17 prime? {}", trial_division::is_prime(17));
+    let cli_parsed = Cli::parse();
+
+    match &cli_parsed.command {
+        Commands::Benchmark {
+            duration,
+            algorithm,
+            output_path,
+        } => {
+            cli::benchmark::handle_cli(duration, algorithm, output_path);
+        }
+    }
 }
