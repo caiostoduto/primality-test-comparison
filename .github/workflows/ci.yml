@@ -23,9 +23,9 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
         with:
-          workspaces: target
+          workspaces: tests
 
       - run: |
           cargo build --release
           cargo test --release
-        working-directory: target
+        working-directory: tests
