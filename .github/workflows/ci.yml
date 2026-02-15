@@ -1,4 +1,4 @@
-name: sCIe
+name: CI
 
 on:
   push:
