@@ -39,3 +39,15 @@ pub fn sieve(n: u64) -> Vec<u64> {
 
     primes
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_sieve() {
+        assert_eq!(sieve(3), vec![2, 3]);
+        assert_eq!(sieve(30), vec![2, 3, 5, 7, 11, 13, 17, 19, 23, 29]);
+        assert_eq!(sieve(40), vec![2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]);
+    }
+}

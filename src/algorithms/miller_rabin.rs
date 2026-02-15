@@ -93,3 +93,74 @@ fn miller_rabin_test(n: u64, witness: u64, d: u64, r: u32) -> bool {
 
     false
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_mod_pow() {
+        assert_eq!(mod_pow(2, 10, 1000), 24); // 2^10 mod 1000 = 1024 mod 1000 = 24
+        assert_eq!(mod_pow(3, 5, 13), 9); // 3^5 mod 13 = 243 mod 13 = 9
+        assert_eq!(mod_pow(7, 3, 11), 2); // 7^3 mod 11 = 343 mod 11 = 2
+    }
+
+    #[test]
+    fn test_edge_cases() {
+        assert!(!is_prime(0));
+        assert!(!is_prime(1));
+    }
+
+    #[test]
+    fn test_small_primes() {
+        let primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47];
+        for &p in &primes {
+            assert!(is_prime(p));
+        }
+    }
+
+    #[test]
+    fn test_small_composites() {
+        let composites = [4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20, 21, 22, 24, 25];
+        for &c in &composites {
+            assert!(!is_prime(c));
+        }
+    }
+
+    #[test]
+    fn test_larger_primes() {
+        let primes = [97, 541, 7919, 104729];
+        for &p in &primes {
+            assert!(is_prime(p));
+        }
+    }
+
+    #[test]
+    fn test_larger_composites() {
+        let composites = [100, 1000, 10000, 52939758, 1029105];
+        for &c in &composites {
+            assert!(!is_prime(c));
+        }
+    }
+
+    #[test]
+    fn test_large_primes() {
+        assert!(is_prime(2147483647)); // 2^31 - 1 (Mersenne prime)
+        assert!(is_prime(4294967291)); // Largest prime < 2^32
+    }
+
+    // https://en.wikipedia.org/wiki/Carmichael_number
+    #[test]
+    fn test_carmichael_numbers() {
+        // Carmichael numbers that fool many probabilistic tests
+        let carmichael_numbers = [
+            561,  // 3 × 11 × 17
+            1105, // 5 × 13 × 17
+            1729, // 7 × 13 × 19
+        ];
+
+        for &c in &carmichael_numbers {
+            assert!(!is_prime(c));
+        }
+    }
+}

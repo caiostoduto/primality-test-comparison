@@ -2,6 +2,10 @@
 // A deterministic polynomial-time primality test
 
 pub fn is_prime(n: u64) -> bool {
+    if n <= 1 {
+        return false;
+    }
+
     // Step 1: Check if n is a perfect power (n = a^b for b > 1)
     if is_perfect_power(n) {
         return false;
@@ -220,4 +224,117 @@ fn poly_mul_mod(a: &[u64], b: &[u64], r: u64, n: u64) -> Vec<u64> {
     }
 
     result
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_perfect_power() {
+        assert!(is_perfect_power(4));
+        assert!(is_perfect_power(8));
+        assert!(is_perfect_power(16));
+        assert!(is_perfect_power(27));
+        assert!(is_perfect_power(64));
+
+        assert!(!is_perfect_power(10));
+        assert!(!is_perfect_power(15));
+        assert!(!is_perfect_power(20));
+        assert!(!is_perfect_power(33));
+        assert!(!is_perfect_power(124));
+    }
+
+    #[test]
+    fn test_pow_checked() {
+        assert!(pow_checked(2, 10) == Some(1024));
+        assert!(pow_checked(3, 5) == Some(243));
+        assert!(pow_checked(10, 16) == Some(10_000_000_000_000_000));
+
+        assert!(pow_checked(10, 20) == None); // Overflow
+        assert!(pow_checked(23, 15) == None); // Overflow
+        assert!(pow_checked(2, 67) == None); // Overflow
+    }
+
+    #[test]
+    fn test_gcd() {
+        assert_eq!(gcd(48, 18), 6);
+        assert_eq!(gcd(101, 10), 1);
+        assert_eq!(gcd(54, 24), 6);
+        assert_eq!(gcd(17, 34), 17);
+
+        // https://en.wikipedia.org/wiki/AKS_primality_test#Example_1:_n_=_31_is_prime
+        assert_eq!(gcd(29, 31), 1);
+        assert_eq!(gcd(28, 31), 1);
+        assert_eq!(gcd(2, 31), 1);
+    }
+
+    #[test]
+    fn test_euler_phi() {
+        assert_eq!(euler_phi(1), 1);
+        assert_eq!(euler_phi(2), 1);
+        assert_eq!(euler_phi(3), 2);
+        assert_eq!(euler_phi(4), 2);
+        assert_eq!(euler_phi(5), 4);
+        assert_eq!(euler_phi(6), 2);
+        assert_eq!(euler_phi(7), 6);
+        assert_eq!(euler_phi(8), 4);
+        assert_eq!(euler_phi(9), 6);
+        assert_eq!(euler_phi(10), 4);
+    }
+
+    #[test]
+    fn test_find_smallest_r() {
+        assert_eq!(find_smallest_r(2), 3);
+        assert_eq!(find_smallest_r(3), 5);
+        assert_eq!(find_smallest_r(4), 11);
+        assert_eq!(find_smallest_r(5), 17);
+        assert_eq!(find_smallest_r(31), 29); // https://en.wikipedia.org/wiki/AKS_primality_test#Example_1:_n_=_31_is_prime
+    }
+
+    #[test]
+    fn test_check_polynomial_congruence() {
+        assert!(check_polynomial_congruence(5, 3, 1));
+        assert!(check_polynomial_congruence(7, 4, 2));
+        assert!(check_polynomial_congruence(11, 5, 3));
+        assert!(check_polynomial_congruence(13, 6, 4));
+    }
+
+    #[test]
+    fn test_edge_cases() {
+        assert!(!is_prime(0));
+        assert!(!is_prime(1));
+    }
+
+    #[test]
+    fn test_small_primes() {
+        let primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47];
+        for &p in &primes {
+            assert!(is_prime(p));
+        }
+    }
+
+    #[test]
+    fn test_small_composites() {
+        let composites = [4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20, 21, 22, 24, 25];
+        for &c in &composites {
+            assert!(!is_prime(c));
+        }
+    }
+
+    #[test]
+    fn test_larger_primes() {
+        let primes = [97, 541, 7919, 104729];
+        for &p in &primes {
+            assert!(is_prime(p));
+        }
+    }
+
+    #[test]
+    fn test_larger_composites() {
+        let composites = [100, 1000, 10000, 1029105];
+        for &c in &composites {
+            assert!(!is_prime(c));
+        }
+    }
 }
