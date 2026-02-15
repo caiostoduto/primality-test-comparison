@@ -6,7 +6,7 @@ use std::thread;
 use std::time::Duration;
 use strum::IntoEnumIterator;
 
-use crate::cli::parsing::Algorithm;
+use crate::cli::parsing::PrimeAlgorithm;
 
 struct PrimeResultLocal {
     number: u64,
@@ -21,7 +21,7 @@ struct PrimeResultFinal {
 
 pub fn handle_cli(
     duration_str: &str,
-    algorithms: &Option<Vec<Algorithm>>,
+    algorithms: &Option<Vec<PrimeAlgorithm>>,
     output_path: &PathBuf,
     save: &bool,
 ) {
@@ -29,7 +29,7 @@ pub fn handle_cli(
     if algorithms.is_none() {
         println!("❗️ No algorithm specified. Running all algorithms.");
 
-        for alg in Algorithm::iter() {
+        for alg in PrimeAlgorithm::iter() {
             run_benchmark(duration_str, alg, output_path, save);
         }
     } else {
@@ -39,7 +39,12 @@ pub fn handle_cli(
     }
 }
 
-fn run_benchmark(duration_str: &str, algorithm: Algorithm, output_path: &PathBuf, save: &bool) {
+fn run_benchmark(
+    duration_str: &str,
+    algorithm: PrimeAlgorithm,
+    output_path: &PathBuf,
+    save: &bool,
+) {
     // Parse duration
     let duration = parse_duration(duration_str).unwrap_or_else(|e| {
         eprintln!("⚠️ Error parsing duration '{}': {}", duration_str, e);

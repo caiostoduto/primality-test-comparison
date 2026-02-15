@@ -1,13 +1,13 @@
 use strum::IntoEnumIterator;
 
-use crate::cli::parsing::Algorithm;
+use crate::cli::parsing::PrimeAlgorithm;
 
-pub fn handle_cli(number: u64, algorithms: &Option<Vec<Algorithm>>) {
+pub fn handle_cli(number: u64, algorithms: &Option<Vec<PrimeAlgorithm>>) {
     // Run benchmark
     if algorithms.is_none() {
         println!("❗️ No algorithm specified. Running all algorithms.");
 
-        for alg in Algorithm::iter() {
+        for alg in PrimeAlgorithm::iter() {
             run_test(number, alg);
         }
     } else {
@@ -17,7 +17,7 @@ pub fn handle_cli(number: u64, algorithms: &Option<Vec<Algorithm>>) {
     }
 }
 
-fn run_test(number: u64, algorithm: Algorithm) {
+fn run_test(number: u64, algorithm: PrimeAlgorithm) {
     println!(
         "🔍 Testing if {} is prime using '{}'...",
         number,

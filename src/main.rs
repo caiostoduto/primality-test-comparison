@@ -19,5 +19,8 @@ fn main() {
         Commands::Test { number, algorithms } => {
             cli::test::handle_cli(*number, algorithms);
         }
+        Commands::Sieve { number, algorithms } => {
+            cli::sieve::handle_cli(*number, algorithms);
+        }
     }
 }

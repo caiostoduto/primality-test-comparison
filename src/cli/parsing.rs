@@ -22,7 +22,7 @@ pub enum Commands {
 
         /// Algorithm to use (comma-separated, e.g., trial-division,miller-rabin)
         #[arg(value_enum, value_delimiter = ',')]
-        algorithms: Option<Vec<Algorithm>>,
+        algorithms: Option<Vec<PrimeAlgorithm>>,
 
         /// Sets a custom output folder for the results (default: ./out)
         #[arg(short, long, value_name = "FOLDER", default_value = "./out")]
@@ -38,12 +38,20 @@ pub enum Commands {
 
         /// Algorithm to use (comma-separated, e.g., trial-division,miller-rabin)
         #[arg(value_enum, value_delimiter = ',')]
-        algorithms: Option<Vec<Algorithm>>,
+        algorithms: Option<Vec<PrimeAlgorithm>>,
+    },
+    Sieve {
+        /// Number to generate primes up to
+        number: u64,
+
+        /// Algorithm to use (comma-separated, e.g., sieve-of-eratosthenes)
+        #[arg(value_enum, value_delimiter = ',')]
+        algorithms: Option<Vec<SieveAlgorithm>>,
     },
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum, EnumIter)]
-pub enum Algorithm {
+pub enum PrimeAlgorithm {
     Aks,
     MillerRabin,
     TrialDivision,
@@ -51,24 +59,43 @@ pub enum Algorithm {
     TrialDivisionSqrt,
 }
 
-impl Algorithm {
+impl PrimeAlgorithm {
     pub fn as_str(&self) -> &'static str {
         match self {
-            Algorithm::Aks => "aks",
-            Algorithm::MillerRabin => "miller-rabin",
-            Algorithm::TrialDivision => "trial-division",
-            Algorithm::TrialDivisionNewton => "trial-division-newton",
-            Algorithm::TrialDivisionSqrt => "trial-division-sqrt",
+            PrimeAlgorithm::Aks => "aks",
+            PrimeAlgorithm::MillerRabin => "miller-rabin",
+            PrimeAlgorithm::TrialDivision => "trial-division",
+            PrimeAlgorithm::TrialDivisionNewton => "trial-division-newton",
+            PrimeAlgorithm::TrialDivisionSqrt => "trial-division-sqrt",
         }
     }
 
     pub fn as_algorithm_fn(&self) -> fn(u64) -> bool {
         match self {
-            Algorithm::Aks => aks::is_prime,
-            Algorithm::MillerRabin => miller_rabin::is_prime,
-            Algorithm::TrialDivision => trial_division::is_prime,
-            Algorithm::TrialDivisionNewton => trial_division_newton::is_prime,
-            Algorithm::TrialDivisionSqrt => trial_division_sqrt::is_prime,
+            PrimeAlgorithm::Aks => aks::is_prime,
+            PrimeAlgorithm::MillerRabin => miller_rabin::is_prime,
+            PrimeAlgorithm::TrialDivision => trial_division::is_prime,
+            PrimeAlgorithm::TrialDivisionNewton => trial_division_newton::is_prime,
+            PrimeAlgorithm::TrialDivisionSqrt => trial_division_sqrt::is_prime,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum, EnumIter)]
+pub enum SieveAlgorithm {
+    SieveOfEratosthenes,
+}
+
+impl SieveAlgorithm {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            SieveAlgorithm::SieveOfEratosthenes => "sieve-of-eratosthenes",
+        }
+    }
+
+    pub fn as_algorithm_fn(&self) -> fn(u64) -> Vec<u64> {
+        match self {
+            SieveAlgorithm::SieveOfEratosthenes => sieve_of_eratosthenes::sieve,
         }
     }
 }
