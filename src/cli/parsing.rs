@@ -42,6 +42,7 @@ pub enum Commands {
 pub enum Algorithm {
     TrialDivision,
     TrialDivisionSqrt,
+    TrialDivisionNewton,
 }
 
 impl Algorithm {
@@ -49,6 +50,7 @@ impl Algorithm {
         match self {
             Algorithm::TrialDivision => "trial-division",
             Algorithm::TrialDivisionSqrt => "trial-division-sqrt",
+            Algorithm::TrialDivisionNewton => "trial-division-newton",
         }
     }
 
@@ -56,6 +58,7 @@ impl Algorithm {
         match self {
             Algorithm::TrialDivision => trial_division::is_prime,
             Algorithm::TrialDivisionSqrt => trial_division_sqrt::is_prime,
+            Algorithm::TrialDivisionNewton => trial_division_newton::is_prime,
         }
     }
 }
