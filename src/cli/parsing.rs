@@ -7,7 +7,7 @@ use crate::algorithms::*;
 #[derive(Parser)]
 #[command(name = "Primality Test Comparison")]
 #[command(version = "1.0.0")]
-#[command(about = "Does awesome things", long_about = None)]
+#[command(about = "A tool to compare different primality testing algorithms", long_about = None)]
 pub struct Cli {
     #[command(subcommand)]
     pub command: Commands,
