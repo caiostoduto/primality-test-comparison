@@ -85,6 +85,16 @@ fn run_benchmark(
     let final_count = primes_vector.lock().unwrap().len();
     println!("\n📊 Final Results:");
     println!("   Primes found: {}", final_count);
+    println!(
+        "   Biggest prime found: {:?}",
+        primes_vector
+            .lock()
+            .unwrap()
+            .iter()
+            .map(|p| p.number)
+            .max()
+            .unwrap()
+    );
 
     if !*save {
         return;
