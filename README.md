@@ -1,7 +1,5 @@
 # Primality Test Comparison
 
-![example workflow](https://github.com/caiostoduto/primality-test-comparison/actions/workflows/ci.yml/badge.svg)
-
 A high-performance command-line tool for comparing different primality testing algorithms, written in Rust. This project implements multiple classical and modern algorithms for testing primality, from simple trial division to the sophisticated AKS (Agrawal-Kayal-Saxena) algorithm.
 
 ## 🎯 Objective
