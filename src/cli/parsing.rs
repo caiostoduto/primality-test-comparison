@@ -20,9 +20,9 @@ pub enum Commands {
         /// Duration to run the benchmark (e.g., 5s, 10m, 1h)
         duration: String,
 
-        /// Algorithm to benchmark (e.g., trial-division, miller-rabin, etc.)
-        #[arg(value_enum)]
-        algorithm: Option<Algorithm>,
+        /// Algorithm to use (comma-separated, e.g., trial-division,miller-rabin)
+        #[arg(value_enum, value_delimiter = ',')]
+        algorithms: Option<Vec<Algorithm>>,
 
         /// Sets a custom output folder for the results (default: ./out)
         #[arg(short, long, value_name = "FOLDER", default_value = "./out")]
@@ -32,9 +32,9 @@ pub enum Commands {
         /// Number to test for primality
         number: u64,
 
-        /// Algorithm to use for testing (e.g., trial-division, miller-rabin, etc.)
-        #[arg(value_enum)]
-        algorithm: Option<Algorithm>,
+        /// Algorithm to use (comma-separated, e.g., trial-division,miller-rabin)
+        #[arg(value_enum, value_delimiter = ',')]
+        algorithms: Option<Vec<Algorithm>>,
     },
 }
 

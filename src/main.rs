@@ -10,13 +10,13 @@ fn main() {
     match &cli_parsed.command {
         Commands::Benchmark {
             duration,
-            algorithm,
+            algorithms,
             output_path,
         } => {
-            cli::benchmark::handle_cli(duration, algorithm, output_path);
+            cli::benchmark::handle_cli(duration, algorithms, output_path);
         }
-        Commands::Test { number, algorithm } => {
-            cli::test::handle_cli(*number, algorithm);
+        Commands::Test { number, algorithms } => {
+            cli::test::handle_cli(*number, algorithms);
         }
     }
 }

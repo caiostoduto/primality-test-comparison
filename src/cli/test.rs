@@ -2,16 +2,18 @@ use strum::IntoEnumIterator;
 
 use crate::cli::parsing::Algorithm;
 
-pub fn handle_cli(number: u64, algorithm: &Option<Algorithm>) {
+pub fn handle_cli(number: u64, algorithms: &Option<Vec<Algorithm>>) {
     // Run benchmark
-    if algorithm.is_none() {
+    if algorithms.is_none() {
         println!("❗️ No algorithm specified. Running all algorithms.");
 
         for alg in Algorithm::iter() {
             run_test(number, alg);
         }
     } else {
-        run_test(number, (*algorithm).unwrap());
+        for alg in algorithms.as_ref().unwrap() {
+            run_test(number, *alg);
+        }
     }
 }
 

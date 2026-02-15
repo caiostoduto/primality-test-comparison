@@ -19,16 +19,18 @@ struct PrimeResultFinal {
     thread_id: usize,
 }
 
-pub fn handle_cli(duration_str: &str, algorithm: &Option<Algorithm>, output_path: &PathBuf) {
+pub fn handle_cli(duration_str: &str, algorithms: &Option<Vec<Algorithm>>, output_path: &PathBuf) {
     // Run benchmark
-    if algorithm.is_none() {
+    if algorithms.is_none() {
         println!("❗️ No algorithm specified. Running all algorithms.");
 
         for alg in Algorithm::iter() {
             run_benchmark(duration_str, alg, output_path);
         }
     } else {
-        run_benchmark(duration_str, (*algorithm).unwrap(), output_path);
+        for alg in algorithms.as_ref().unwrap() {
+            run_benchmark(duration_str, *alg, output_path);
+        }
     }
 }
 
