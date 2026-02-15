@@ -28,8 +28,8 @@ pub enum Commands {
         #[arg(short, long, value_name = "FOLDER", default_value = "./out")]
         output_path: PathBuf,
 
-        /// Save results to a file (default: true)
-        #[arg(short, long, default_value = "true")]
+        /// Save results to a file (default: false)
+        #[arg(short, long, default_value = "false")]
         save: bool,
     },
     Test {
