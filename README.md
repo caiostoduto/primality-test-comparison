@@ -222,7 +222,7 @@ This format allows for efficient analysis using tools like:
 
 ```bash
 # Test the same number with all algorithms
-cargo run --release -- test 18446744073709551557 \
+cargo run --release test 18446744073709551557 \
   trial-division,miller-rabin,aks
 ```
 
@@ -230,14 +230,14 @@ cargo run --release -- test 18446744073709551557 \
 
 ```bash
 # Find as many primes as possible in 1 hour
-cargo run --release -- benchmark 1h miller-rabin --save -o ./results
+cargo run --release benchmark 1h miller-rabin --save -o ./results
 ```
 
 ### Quick Sieve Comparison
 
 ```bash
 # Generate first million primes
-cargo run --release -- sieve 1000000
+cargo run --release sieve 1000000
 ```
 
 ## 🔬 Performance Notes
