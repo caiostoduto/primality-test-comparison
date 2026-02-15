@@ -27,6 +27,10 @@ pub enum Commands {
         /// Sets a custom output folder for the results (default: ./out)
         #[arg(short, long, value_name = "FOLDER", default_value = "./out")]
         output_path: PathBuf,
+
+        /// Save results to a file (default: true)
+        #[arg(short, long, default_value = "true")]
+        save: bool,
     },
     Test {
         /// Number to test for primality

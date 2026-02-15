@@ -19,22 +19,27 @@ struct PrimeResultFinal {
     thread_id: usize,
 }
 
-pub fn handle_cli(duration_str: &str, algorithms: &Option<Vec<Algorithm>>, output_path: &PathBuf) {
+pub fn handle_cli(
+    duration_str: &str,
+    algorithms: &Option<Vec<Algorithm>>,
+    output_path: &PathBuf,
+    save: &bool,
+) {
     // Run benchmark
     if algorithms.is_none() {
         println!("❗️ No algorithm specified. Running all algorithms.");
 
         for alg in Algorithm::iter() {
-            run_benchmark(duration_str, alg, output_path);
+            run_benchmark(duration_str, alg, output_path, save);
         }
     } else {
         for alg in algorithms.as_ref().unwrap() {
-            run_benchmark(duration_str, *alg, output_path);
+            run_benchmark(duration_str, *alg, output_path, save);
         }
     }
 }
 
-fn run_benchmark(duration_str: &str, algorithm: Algorithm, output_path: &PathBuf) {
+fn run_benchmark(duration_str: &str, algorithm: Algorithm, output_path: &PathBuf, save: &bool) {
     // Parse duration
     let duration = parse_duration(duration_str).unwrap_or_else(|e| {
         eprintln!("⚠️ Error parsing duration '{}': {}", duration_str, e);
@@ -75,6 +80,10 @@ fn run_benchmark(duration_str: &str, algorithm: Algorithm, output_path: &PathBuf
     let final_count = primes_vector.lock().unwrap().len();
     println!("\n📊 Final Results:");
     println!("   Primes found: {}", final_count);
+
+    if !*save {
+        return;
+    }
 
     // Order primes by timestamp
     let mut primes = primes_vector.lock().unwrap();
